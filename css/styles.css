@@ -1,0 +1,143 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+@font-face {
+    font-family: 'digital-display';
+    src: url('../fonts/Digital\ Dismay.otf') format('opentype');
+}
+
+body {
+    align-items: center;
+    display: flex;
+    height: 100vh;
+    justify-content: center;
+    width: 100vw;
+}
+
+.calculator-container {
+    border-radius: 10px;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-rows: repeat(6, minmax(0, 1fr));
+    border: solid 1px darkblue;
+    display: grid;
+    grid-gap: 8px;
+    grid-template-areas: "disp disp disp disp" "AC delete squared multiply" "seven eight nine divide" "four five six minus" "one two three plus" "zero decimal equals equals";
+    height: 500px;
+    padding: 8px;
+    width: 350px;
+}
+
+.display-container {
+    position: relative
+}
+
+.display-text,
+.text-underlay {
+    position: absolute;
+    font-family: 'digital-display';
+    font-size: 72px;
+    text-align: right;
+    overflow: hidden;
+}
+
+.display-text {
+    z-index: 2;
+}
+
+.text-underlay {
+    opacity: 0.1;
+}
+
+.buttons {
+    cursor: pointer;
+    font-size: 32px;
+    overflow: hidden;
+    padding: 0;
+    margin: 0;
+}
+
+#displayContainer {
+    grid-area: disp;
+}
+
+#zeroButton {
+    grid-area: zero;
+}
+
+#oneButton {
+    grid-area: one;
+}
+
+#twoButton {
+    grid-area: two;
+}
+
+#threeButton {
+    grid-area: three;
+}
+
+#fourButton {
+    grid-area: four;
+}
+
+#fiveButton {
+    grid-area: five;
+}
+
+#sixButton {
+    grid-area: six;
+}
+
+#sevenButton {
+    grid-area: seven;
+}
+
+#eightButton {
+    grid-area: eight;
+}
+
+#nineButton {
+    grid-area: nine;
+}
+
+#decimalButton {
+    grid-area: decimal;
+}
+
+#plusButton {
+    grid-area: plus;
+}
+
+#minusButton {
+    grid-area: minus;
+}
+
+#divideButton {
+    grid-area: divide;
+}
+
+#multiplyButton {
+    grid-area: multiply;
+}
+
+#squareButton {
+    grid-area: squared;
+}
+
+#deleteButton {
+    grid-area: delete;
+}
+
+.material-icons-outlined {
+    font-size: 35px !important;
+}
+
+#equalsButton {
+    grid-area: equals;
+}
+
+#clearButton {
+    grid-area: AC;
+}
