@@ -1,11 +1,7 @@
 * {
     margin: 0;
     padding: 0;
-}
-
-@font-face {
-    font-family: 'digital-display';
-    src: url('../fonts/Digital\ Dismay.otf') format('opentype');
+    font-family: serif;
 }
 
 body {
@@ -17,45 +13,61 @@ body {
 }
 
 .calculator-container {
+    background-color: black;
     border-radius: 10px;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    grid-template-rows: repeat(6, minmax(0, 1fr));
     border: solid 1px darkblue;
     display: grid;
     grid-gap: 8px;
-    grid-template-areas: "disp disp disp disp" "AC delete squared multiply" "seven eight nine divide" "four five six minus" "one two three plus" "zero decimal equals equals";
+    grid-template-areas: "disp disp disp disp" "AC C plusMinus divide" "seven eight nine multiply" "four five six minus" "one two three plus" "zero zero decimal equals";
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-rows: repeat(6, minmax(0, 1fr));
     height: 500px;
-    padding: 8px;
+    padding: 24px 12px;
     width: 350px;
 }
 
 .display-container {
-    position: relative
-}
-
-.display-text,
-.text-underlay {
-    position: absolute;
-    font-family: 'digital-display';
-    font-size: 72px;
-    text-align: right;
-    overflow: hidden;
+    background-color: white;
+    border-radius: 10px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    position: relative;
 }
 
 .display-text {
-    z-index: 2;
-}
-
-.text-underlay {
-    opacity: 0.1;
+    color: black;
+    font-size: 50px;
+    overflow: hidden;
+    position: absolute;
+    margin: auto 5px;
 }
 
 .buttons {
+    border-radius: 100px;
+    border: none;
     cursor: pointer;
     font-size: 32px;
+    margin: 0;
     overflow: hidden;
     padding: 0;
-    margin: 0;
+}
+
+.operator-buttons,
+.equals-button {
+    background-color: #FD9D09;
+    color: white;
+}
+
+.clear-button,
+.all-clear-button,
+.plus-minus-button {
+    background-color: #A3A4A4;
+}
+
+.number-buttons {
+    background-color: #323232;
+    color: white;
 }
 
 #displayContainer {
@@ -64,6 +76,8 @@ body {
 
 #zeroButton {
     grid-area: zero;
+    padding-left: 30px;
+    text-align: left;
 }
 
 #oneButton {
@@ -106,6 +120,10 @@ body {
     grid-area: decimal;
 }
 
+#plusMinusButton {
+    grid-area: plusMinus;
+}
+
 #plusButton {
     grid-area: plus;
 }
@@ -122,14 +140,6 @@ body {
     grid-area: multiply;
 }
 
-#squareButton {
-    grid-area: squared;
-}
-
-#deleteButton {
-    grid-area: delete;
-}
-
 .material-icons-outlined {
     font-size: 35px !important;
 }
@@ -139,5 +149,9 @@ body {
 }
 
 #clearButton {
+    grid-area: C;
+}
+
+#allClearButton {
     grid-area: AC;
 }
