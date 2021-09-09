@@ -131,7 +131,7 @@ function doDivision(a, b) {
 }
 
 function displayAnswer() {
-    let displayLength = 11;
+    let displayLength = 10;
     if (value.toString().length < displayLength) {
         displayLength = value.toString().length
     }
