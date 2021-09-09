@@ -4,6 +4,8 @@ let value = null;
 let tempValue = null;
 let operator = null;
 let newNumber = true;
+//checks for cases when operator was mispressed and user just wants to change the operator
+let operatorChange = false;
 
 for (i = 0; i < allButtons.length; i++) {
     allButtons[i].addEventListener('click', handleButtonClick);
@@ -19,22 +21,38 @@ function handleButtonClick(event) {
 }
 
 function handleNumberButtons(event) {
+    operatorChange = false;
     if (newNumber === true) {
         displayText.innerText = '';
         newNumber = false;
     }
 
+    //Can't have more than one decimal
     if (event.target.innerText === '.' && displayText.innerText.includes('.')) {
         return;
     }
+
+    //Adds zero to front of numbers less than 1
+    if (event.target.innerText === '.' && displayText.innerText === '') {
+        displayText.innerText += 0;
+    }
+
     displayText.innerText += event.target.innerText;
 
 }
 
 function handleOperatorButtons(event) {
+    if (displayText.innerText === '') return; //case where no number is entered
+
+    //In case user misclicked and just wants to change operator before next number
+    if (operatorChange === true) {
+        operator = event.target.id;
+        return;
+    }
+
     tempValue = Number(displayText.innerText);
 
-    //do math if two values have been already been entered
+    //doMath() if two values have been already been entered
     if (value === null) {
         value = tempValue;
     } else {
@@ -42,6 +60,7 @@ function handleOperatorButtons(event) {
     }
 
     //reset variables for next go around
+    operatorChange = true;
     tempValue = null;
     newNumber = true;
     operator = event.target.id;
@@ -78,6 +97,7 @@ function handleAllClearButton() {
     tempValue = null;
     operator = null;
     newNumber = true;
+    operatorChange = false;
 }
 
 function doMath() {
@@ -93,11 +113,13 @@ function doMath() {
 }
 
 function doAddition(a, b) {
-    return a + b;
+    //converts to int before doing math to avoid decimal problems (e.g. -0.3+0.1)
+    return (a * 1000000 + b * 1000000) / 1000000;
 }
 
 function doSubtraction(a, b) {
-    return a - b;
+    //converts to int before doing math to avoid decimal problems (e.g. 0.3-0.1)
+    return (a * 1000000 - b * 1000000) / 1000000;
 }
 
 function doMultiplication(a, b) {
@@ -109,5 +131,9 @@ function doDivision(a, b) {
 }
 
 function displayAnswer() {
-    displayText.innerText = value;
+    let displayLength = 11;
+    if (value.toString().length < displayLength) {
+        displayLength = value.toString().length
+    }
+    displayText.innerText = Number(value.toString().substring(0, displayLength));
 }
