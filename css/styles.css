@@ -59,6 +59,10 @@ body {
     color: white;
 }
 
+.operator-buttons.selected {
+    background-color: red;
+}
+
 .clear-button,
 .all-clear-button,
 .plus-minus-button {

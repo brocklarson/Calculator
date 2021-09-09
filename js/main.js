@@ -2,6 +2,8 @@ const allButtons = document.querySelectorAll('.buttons');
 const displayText = document.getElementById('displayText');
 let value = null;
 let tempValue = null;
+let operator = null;
+let newNumber = true;
 
 for (i = 0; i < allButtons.length; i++) {
     allButtons[i].addEventListener('click', handleButtonClick);
@@ -9,39 +11,103 @@ for (i = 0; i < allButtons.length; i++) {
 
 function handleButtonClick(event) {
     if (event.target.classList.contains('number-buttons')) handleNumberButtons(event);
-    if (event.target.classList.contains('operator-buttons')) handleOperatorButtons(event);
-    if (event.target.id === "plusMinusButton") handlePlusMinusButton();
-    if (event.target.id === "equalsButton") handleEqualsButton();
-    if (event.target.id === "clearButton") handleClearButton();
-    if (event.target.id === "allClearButton") handleAllClearButton();
+    else if (event.target.classList.contains('operator-buttons')) handleOperatorButtons(event);
+    else if (event.target.id === 'plusMinusButton') handlePlusMinusButton();
+    else if (event.target.id === 'equalsButton') handleEqualsButton();
+    else if (event.target.id === 'clearButton') handleClearButton();
+    else if (event.target.id === 'allClearButton') handleAllClearButton();
 }
 
 function handleNumberButtons(event) {
-    if (event.target.innerText === "." && displayText.innerText.includes('.')) {
-        console.log("can't use another decimal");
+    if (newNumber === true) {
+        displayText.innerText = '';
+        newNumber = false;
+    }
+
+    if (event.target.innerText === '.' && displayText.innerText.includes('.')) {
         return;
     }
     displayText.innerText += event.target.innerText;
+
 }
 
 function handleOperatorButtons(event) {
-    console.log(event.target.id);
+    tempValue = Number(displayText.innerText);
+
+    //do math if two values have been already been entered
+    if (value === null) {
+        value = tempValue;
+    } else {
+        value = doMath();
+    }
+
+    //reset variables for next go around
+    tempValue = null;
+    newNumber = true;
+    operator = event.target.id;
+    displayAnswer();
 }
 
 function handlePlusMinusButton() {
     let numberConvert = Number(displayText.innerText);
-    numberConvert = numberConvert * -1;
+    numberConvert = -numberConvert;
     displayText.innerText = numberConvert;
 }
 
 function handleEqualsButton() {
-    console.log('equalsButton');
+    tempValue = Number(displayText.innerText);
+    value = doMath();
+    displayAnswer();
+
+    //resets variables for next go around
+    tempValue = value;
+    value = null;
+    newNumber = true;
+    operator = null;
 }
 
 function handleClearButton() {
-    displayText.innerText = "";
+    displayText.innerText = '';
+    tempValue = null;
+    newNumber = true;
 }
 
 function handleAllClearButton() {
-    console.log('allClearButton');
+    displayText.innerText = '';
+    value = null;
+    tempValue = null;
+    operator = null;
+    newNumber = true;
+}
+
+function doMath() {
+    if (operator === 'plusButton') {
+        return doAddition(value, tempValue);
+    } else if (operator === 'minusButton') {
+        return doSubtraction(value, tempValue);
+    } else if (operator === 'multiplyButton') {
+        return doMultiplication(value, tempValue);
+    } else if (operator === 'divideButton') {
+        return doDivision(value, tempValue);
+    }
+}
+
+function doAddition(a, b) {
+    return a + b;
+}
+
+function doSubtraction(a, b) {
+    return a - b;
+}
+
+function doMultiplication(a, b) {
+    return a * b;
+}
+
+function doDivision(a, b) {
+    return a / b;
+}
+
+function displayAnswer() {
+    displayText.innerText = value;
 }
