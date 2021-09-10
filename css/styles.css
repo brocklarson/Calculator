@@ -59,6 +59,7 @@ main {
 }
 
 .buttons {
+    -webkit-tap-highlight-color: transparent;
     border-radius: 100px;
     border: none;
     cursor: pointer;
@@ -192,7 +193,7 @@ footer {
     gap: 10px;
     justify-content: center;
     margin-bottom: 8px;
-    position: absolute;
+    position: fixed;
     width: 100%;
 }
 
