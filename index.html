@@ -11,37 +11,43 @@
 
     <link rel="icon" href="icons/icon.png">
     <link rel="stylesheet" href="css/styles.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined">
+
+    <script src="https://kit.fontawesome.com/4c536a6bd5.js" crossorigin="anonymous"></script>
     <script src="js/main.js" defer></script>
 </head>
 
 <body>
-
-    <div id="calculatorContainer" class="calculator-container">
-        <div id="displayContainer" class="display-container">
-            <p id="displayText" class="display-text"></p>
+    <main>
+        <div id="calculatorContainer" class="calculator-container">
+            <div id="displayContainer" class="display-container">
+                <p id="displayText" class="display-text"></p>
+            </div>
+            <button id="zeroButton" class="number-buttons buttons" tabindex="18">0</button>
+            <button id="oneButton" class="number-buttons buttons" tabindex="13">1</button>
+            <button id="twoButton" class="number-buttons buttons" tabindex="14">2</button>
+            <button id="threeButton" class="number-buttons buttons" tabindex="15">3</button>
+            <button id="fourButton" class="number-buttons buttons" tabindex="9">4</button>
+            <button id="fiveButton" class="number-buttons buttons" tabindex="10">5</button>
+            <button id="sixButton" class="number-buttons buttons" tabindex="11">6</button>
+            <button id="sevenButton" class="number-buttons buttons" tabindex="5">7</button>
+            <button id="eightButton" class="number-buttons buttons" tabindex="6">8</button>
+            <button id="nineButton" class="number-buttons buttons" tabindex="7">9</button>
+            <button id="decimalButton" class="number-buttons buttons" tabindex="17">.</button>
+            <button id="plusButton" class="operator-buttons buttons" tabindex="16">+</button>
+            <button id="minusButton" class="operator-buttons buttons" tabindex="12">−</button>
+            <button id="divideButton" class="operator-buttons buttons" tabindex="4">÷</button>
+            <button id="multiplyButton" class="operator-buttons buttons" tabindex="8">×</button>
+            <button id="plusMinusButton" class="plus-minus-button buttons" tabindex="3"><sup>+</sup>/<sub>−</sub></button>
+            <button id="equalsButton" class="equals-button buttons" tabindex="19">=</button>
+            <button id="clearButton" class="clear-button buttons" tabindex="2">C</button>
+            <button id="allClearButton" class="all-clear-button buttons" tabindex="1">AC</button>
         </div>
-        <button id="zeroButton" class="number-buttons buttons" tabindex="18">0</button>
-        <button id="oneButton" class="number-buttons buttons" tabindex="13">1</button>
-        <button id="twoButton" class="number-buttons buttons" tabindex="14">2</button>
-        <button id="threeButton" class="number-buttons buttons" tabindex="15">3</button>
-        <button id="fourButton" class="number-buttons buttons" tabindex="9">4</button>
-        <button id="fiveButton" class="number-buttons buttons" tabindex="10">5</button>
-        <button id="sixButton" class="number-buttons buttons" tabindex="11">6</button>
-        <button id="sevenButton" class="number-buttons buttons" tabindex="5">7</button>
-        <button id="eightButton" class="number-buttons buttons" tabindex="6">8</button>
-        <button id="nineButton" class="number-buttons buttons" tabindex="7">9</button>
-        <button id="decimalButton" class="number-buttons buttons" tabindex="17">.</button>
-        <button id="plusButton" class="operator-buttons buttons" tabindex="16">+</button>
-        <button id="minusButton" class="operator-buttons buttons" tabindex="12">−</button>
-        <button id="divideButton" class="operator-buttons buttons" tabindex="4">÷</button>
-        <button id="multiplyButton" class="operator-buttons buttons" tabindex="8">×</button>
-        <button id="plusMinusButton" class="plus-minus-button buttons" tabindex="3">+/−</button>
-        <button id="equalsButton" class="equals-button buttons" tabindex="19">=</button>
-        <button id="clearButton" class="clear-button buttons" tabindex="2">C</button>
-        <button id="allClearButton" class="all-clear-button buttons" tabindex="1">AC</button>
-    </div>
-
+    </main>
+    <footer>
+        <p>Brock Larson &copy; 2021 </p>
+        <a href="https://github.com/brocklarson" target="_blank">
+            <i class="fab fa-github"></i></a>
+    </footer>
 </body>
 
 </html>
