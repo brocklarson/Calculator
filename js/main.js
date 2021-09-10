@@ -47,7 +47,7 @@ function handleOperatorButtons(event) {
 
     //In case user misclicked and just wants to change operator before next number
     if (operatorChange === true) {
-        setOperator(event.target.id);
+        operator = event.target.id;
         return;
     }
 
@@ -60,7 +60,7 @@ function handleOperatorButtons(event) {
         value = doMath();
     }
 
-    setOperator(event.target.id);
+    operator = event.target.id;
 
     //reset variables for next go around
     operatorChange = true;
@@ -76,12 +76,13 @@ function handlePlusMinusButton() {
 }
 
 function handleEqualsButton() {
-    if (operatorChange === true) return; //can't press equals right after an operator
+    //can't press equals right after an operator
+    if (operatorChange === true || value === null) return;
     tempValue = Number(displayText.innerText);
     value = doMath();
     displayAnswer();
 
-    //resets variables for next go around
+    //reset variables for next go around
     tempValue = value;
     value = null;
     newNumber = true;
@@ -101,9 +102,6 @@ function handleAllClearButton() {
     operator = null;
     newNumber = true;
     operatorChange = false;
-    for (i = 0; i < operatorButtons.length; i++) {
-        operatorButtons[i].classList.remove('selected');
-    }
 }
 
 function doMath() {
@@ -147,13 +145,4 @@ function displayAnswer() {
         answer = "Error";
     }
     displayText.innerText = answer;
-}
-
-function setOperator(buttonID) {
-    operator = buttonID
-        //Add class to give button focus
-    for (i = 0; i < operatorButtons.length; i++) {
-        operatorButtons[i].classList.remove('selected');
-    }
-    document.getElementById(operator).classList.add('selected');
 }
