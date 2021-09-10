@@ -5,23 +5,38 @@ let value = null;
 let tempValue = null;
 let operator = null;
 let newNumber = true;
-//checks for cases when operator was mispressed and user just wants to change the operator
+//checks for cases when operator button was mispressed 
+//and user just wants to change the current operator
 let operatorChange = false;
 
 for (i = 0; i < allButtons.length; i++) {
     allButtons[i].addEventListener('click', handleButtonClick);
 }
+document.addEventListener('keypress', handleKeyPress);
+
+function handleKeyPress(event) {
+    if (isFinite(event.key) || event.key === ".") handleNumberButtons(event.key);
+    else if (event.key === "=" || event.code === "Enter") handleEqualsButton();
+    else if (event.key === "+") handleOperatorButtons("plusButton");
+    else if (event.key === "-") handleOperatorButtons("minusButton");
+    else if (event.key === "/") handleOperatorButtons("divideButton");
+    else if (event.key === "*" || event.code === "KeyX") handleOperatorButtons("multiplyButton");
+    else if (event.code === "KeyA") handleAllClearButton();
+    else if (event.code === "KeyC") handleClearButton();
+    else if (event.code === "KeyP" || event.code === "KeyM" || event.code === "KeyN" || event.code === "KeyI") handlePlusMinusButton();
+}
 
 function handleButtonClick(event) {
-    if (event.target.classList.contains('number-buttons')) handleNumberButtons(event);
-    else if (event.target.classList.contains('operator-buttons')) handleOperatorButtons(event);
+    if (event.target.classList.contains('number-buttons')) handleNumberButtons(event.target.innerText);
+    else if (event.target.classList.contains('operator-buttons')) handleOperatorButtons(event.target.id);
     else if (event.target.id === 'plusMinusButton') handlePlusMinusButton();
     else if (event.target.id === 'equalsButton') handleEqualsButton();
     else if (event.target.id === 'clearButton') handleClearButton();
     else if (event.target.id === 'allClearButton') handleAllClearButton();
 }
 
-function handleNumberButtons(event) {
+function handleNumberButtons(pressedButton) {
+    document.activeElement.blur();
     operatorChange = false;
     if (newNumber === true) {
         displayText.innerText = '';
@@ -29,38 +44,37 @@ function handleNumberButtons(event) {
     }
 
     //Can't have more than one decimal
-    if (event.target.innerText === '.' && displayText.innerText.includes('.')) {
+    if (pressedButton === '.' && displayText.innerText.includes('.')) {
         return;
     }
 
-    //Adds zero to front of numbers less than 1
-    if (event.target.innerText === '.' && displayText.innerText === '') {
+    //Adds zero to front of decimal numbers less than 1
+    if (pressedButton === '.' && displayText.innerText === '') {
         displayText.innerText += 0;
     }
 
-    displayText.innerText += event.target.innerText;
+    displayText.innerText += pressedButton;
 
 }
 
-function handleOperatorButtons(event) {
-    if (displayText.innerText === '') return; //case where no number is entered
+function handleOperatorButtons(pressedOperator) {
+    //case where no number is entered
+    if (displayText.innerText === '') return;
 
+    document.getElementById(pressedOperator).focus();
     //In case user misclicked and just wants to change operator before next number
     if (operatorChange === true) {
-        operator = event.target.id;
+        operator = pressedOperator;
         return;
     }
 
     tempValue = Number(displayText.innerText);
 
     //doMath() if two values have been already been entered
-    if (value === null) {
-        value = tempValue;
-    } else {
-        value = doMath();
-    }
+    if (value === null) value = tempValue;
+    else value = doMath();
 
-    operator = event.target.id;
+    operator = pressedOperator;
 
     //reset variables for next go around
     operatorChange = true;
@@ -78,6 +92,8 @@ function handlePlusMinusButton() {
 function handleEqualsButton() {
     //can't press equals right after an operator
     if (operatorChange === true || value === null) return;
+
+    document.getElementById("equalsButton").focus();
     tempValue = Number(displayText.innerText);
     value = doMath();
     displayAnswer();
@@ -85,7 +101,7 @@ function handleEqualsButton() {
     //reset variables for next go around
     tempValue = value;
     value = null;
-    newNumber = true;
+    newNumber = false;
     operator = null;
 }
 
