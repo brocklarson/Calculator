@@ -19,7 +19,7 @@ function handleKeyPress(event) {
     else if (event.key === "=" || event.code === "Enter") handleEqualsButton();
     else if (event.key === "+") handleOperatorButtons("plusButton");
     else if (event.key === "-") handleOperatorButtons("minusButton");
-    else if (event.key === "/") handleOperatorButtons("divideButton");
+    else if (event.key === "/" || event.code === "Slash") handleOperatorButtons("divideButton");
     else if (event.key === "*" || event.code === "KeyX") handleOperatorButtons("multiplyButton");
     else if (event.code === "KeyA") handleAllClearButton();
     else if (event.code === "KeyC") handleClearButton();
