@@ -1,4 +1,5 @@
 const allButtons = document.querySelectorAll('.buttons');
+const operatorButtons = document.querySelectorAll('.operator-buttons');
 const displayText = document.getElementById('displayText');
 let value = null;
 let tempValue = null;
@@ -46,7 +47,7 @@ function handleOperatorButtons(event) {
 
     //In case user misclicked and just wants to change operator before next number
     if (operatorChange === true) {
-        operator = event.target.id;
+        setOperator(event.target.id);
         return;
     }
 
@@ -59,11 +60,12 @@ function handleOperatorButtons(event) {
         value = doMath();
     }
 
+    setOperator(event.target.id);
+
     //reset variables for next go around
     operatorChange = true;
     tempValue = null;
     newNumber = true;
-    operator = event.target.id;
     displayAnswer();
 }
 
@@ -74,6 +76,7 @@ function handlePlusMinusButton() {
 }
 
 function handleEqualsButton() {
+    if (operatorChange === true) return; //can't press equals right after an operator
     tempValue = Number(displayText.innerText);
     value = doMath();
     displayAnswer();
@@ -98,6 +101,9 @@ function handleAllClearButton() {
     operator = null;
     newNumber = true;
     operatorChange = false;
+    for (i = 0; i < operatorButtons.length; i++) {
+        operatorButtons[i].classList.remove('selected');
+    }
 }
 
 function doMath() {
@@ -135,5 +141,19 @@ function displayAnswer() {
     if (value.toString().length < displayLength) {
         displayLength = value.toString().length
     }
-    displayText.innerText = Number(value.toString().substring(0, displayLength));
+
+    let answer = Number(value.toString().substring(0, displayLength));
+    if (Number.isNaN(answer)) {
+        answer = "Error";
+    }
+    displayText.innerText = answer;
+}
+
+function setOperator(buttonID) {
+    operator = buttonID
+        //Add class to give button focus
+    for (i = 0; i < operatorButtons.length; i++) {
+        operatorButtons[i].classList.remove('selected');
+    }
+    document.getElementById(operator).classList.add('selected');
 }

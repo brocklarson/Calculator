@@ -19,7 +19,7 @@ body {
     box-sizing: border-box;
     display: grid;
     grid-gap: 8px;
-    grid-template-areas: "disp disp disp disp" "AC C plusMinus divide" "seven eight nine multiply" "four five six minus" "one two three plus" "zero zero decimal equals";
+    grid-template-areas: "disp disp disp disp" "AC C plusMinus divide" "seven eight nine multiply" "four five six minus" "one two three plus" "decimal zero equals equals";
     grid-template-columns: repeat(4, minmax(0, 1fr));
     grid-template-rows: repeat(6, minmax(0, 1fr));
     height: 550px;
@@ -61,7 +61,7 @@ body {
 }
 
 .operator-buttons.selected {
-    background-color: red;
+    border: solid 1px red;
 }
 
 .clear-button,
@@ -81,8 +81,6 @@ body {
 
 #zeroButton {
     grid-area: zero;
-    padding-left: 30px;
-    text-align: left;
 }
 
 #oneButton {
@@ -143,10 +141,6 @@ body {
 
 #multiplyButton {
     grid-area: multiply;
-}
-
-.material-icons-outlined {
-    font-size: 35px !important;
 }
 
 #equalsButton {
