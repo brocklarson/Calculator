@@ -1,22 +1,21 @@
 const allButtons = document.querySelectorAll('.buttons');
+const numberButtons = document.querySelectorAll('.number-buttons');
 const operatorButtons = document.querySelectorAll('.operator-buttons');
 const displayText = document.getElementById('displayText');
 let value = null;
-let tempValue = null;
+let newValue = null;
 let operator = null;
 let newNumber = true;
-//checks for cases when operator button was mispressed 
-//and user just wants to change the current operator
-let operatorChange = false;
+let changingOperator = false;
 
-for (i = 0; i < allButtons.length; i++) {
+for (let i = 0; i < allButtons.length; i++) {
     allButtons[i].addEventListener('click', handleButtonClick);
 }
 document.addEventListener('keypress', handleKeyPress);
 
 function handleKeyPress(event) {
     if (isFinite(event.key) || event.key === ".") handleNumberButtons(event.key);
-    else if (event.key === "=" || event.code === "Enter") handleEqualsButton();
+    else if (event.key === "=" || event.key === "Enter") handleEqualsButton();
     else if (event.key === "+") handleOperatorButtons("plusButton");
     else if (event.key === "-") handleOperatorButtons("minusButton");
     else if (event.key === "/" || event.code === "Slash") handleOperatorButtons("divideButton");
@@ -36,129 +35,140 @@ function handleButtonClick(event) {
 }
 
 function handleNumberButtons(pressedButton) {
-    document.activeElement.blur();
-    operatorChange = false;
-    if (newNumber === true) {
-        displayText.innerText = '';
-        newNumber = false;
-    }
+    setButtonFocus(pressedButton);
+    changingOperator = false;
 
-    //Can't have more than one decimal
-    if (pressedButton === '.' && displayText.innerText.includes('.')) {
-        return;
-    }
-
-    //Adds zero to front of decimal numbers less than 1
-    if (pressedButton === '.' && displayText.innerText === '') {
-        displayText.innerText += 0;
-    }
-
-    displayText.innerText += pressedButton;
-
+    if (newNumber) clearDisplayScreen();
+    if (pressedButton === '.') handleDecimal(pressedButton);
+    else displayText.innerText += pressedButton;
 }
 
-function handleOperatorButtons(pressedOperator) {
-    //case where no number is entered
-    if (displayText.innerText === '') return;
+function handleDecimal(pressedButton) {
+    if (displayText.innerText.includes('.')) return;
+    if (displayText.innerText === '') displayText.innerText += '0';
+    displayText.innerText += pressedButton;
+}
 
-    document.getElementById(pressedOperator).focus();
-    //In case user misclicked and just wants to change operator before next number
-    if (operatorChange === true) {
-        operator = pressedOperator;
-        return;
-    }
-
-    tempValue = Number(displayText.innerText);
-
-    //doMath() if two values have been already been entered
-    if (value === null) value = tempValue;
-    else value = doMath();
-
-    operator = pressedOperator;
-
-    //reset variables for next go around
-    operatorChange = true;
-    tempValue = null;
-    newNumber = true;
+function handleOperatorButtons(pressedButton) {
+    if (isDisplayEmpty()) return;
+    setButtonFocus(pressedButton);
+    if (!changingOperator) setValues();
+    operator = pressedButton;
     displayAnswer();
+    resetVariables('afterOperatorButton');
 }
 
 function handlePlusMinusButton() {
-    let numberConvert = Number(displayText.innerText);
-    numberConvert = -numberConvert;
-    displayText.innerText = numberConvert;
+    if (isDisplayEmpty()) return;
+    displayText.innerText = -displayText.innerText;
+    setButtonFocus('plusMinusButton')
 }
 
 function handleEqualsButton() {
-    //can't press equals right after an operator
-    if (operatorChange === true || value === null) return;
-
-    document.getElementById("equalsButton").focus();
-    tempValue = Number(displayText.innerText);
-    value = doMath();
+    if (changingOperator || value === null) return;
+    setButtonFocus('equalsButton');
+    setValues();
     displayAnswer();
-
-    //reset variables for next go around
-    tempValue = value;
-    value = null;
-    newNumber = false;
-    operator = null;
+    resetVariables('afterEqualsButton');
 }
 
 function handleClearButton() {
     displayText.innerText = '';
-    tempValue = null;
+    newValue = null;
     newNumber = true;
+    setButtonFocus('clearButton');
 }
 
 function handleAllClearButton() {
     displayText.innerText = '';
     value = null;
-    tempValue = null;
+    newValue = null;
     operator = null;
     newNumber = true;
-    operatorChange = false;
+    changingOperator = false;
+    setButtonFocus('allClearButton');
 }
 
-function doMath() {
-    if (operator === 'plusButton') {
-        return doAddition(value, tempValue);
-    } else if (operator === 'minusButton') {
-        return doSubtraction(value, tempValue);
-    } else if (operator === 'multiplyButton') {
-        return doMultiplication(value, tempValue);
-    } else if (operator === 'divideButton') {
-        return doDivision(value, tempValue);
+function setValues() {
+    newValue = Number(displayText.innerText);
+    if (value === null) value = newValue;
+    else value = doMath();
+}
+
+function setButtonFocus(button) {
+    if (isFinite(button)) button = getButtonID(button);
+    else if (button === ".") button = 'decimalButton';
+    document.getElementById(button).focus();
+}
+
+function getButtonID(button) {
+    for (let i = 0; i < numberButtons.length; i++) {
+        if (numberButtons[i].innerText === button) return numberButtons[i].id;
     }
 }
 
-function doAddition(a, b) {
+function isDisplayEmpty() {
+    if (displayText.innerText === '') return true;
+    return false;
+}
+
+function clearDisplayScreen() {
+    displayText.innerText = '';
+    newNumber = false;
+}
+
+function resetVariables(state) {
+    if (state === 'afterEqualsButton') {
+        newValue = value;
+        value = null;
+        newNumber = false;
+        operator = null;
+    } else if (state === 'afterOperatorButton') {
+        changingOperator = true;
+        newValue = null;
+        newNumber = true;
+    }
+}
+
+function doMath() {
+    if (operator === 'plusButton') return addition(value, newValue);
+    else if (operator === 'minusButton') return subtraction(value, newValue);
+    else if (operator === 'multiplyButton') return multiplication(value, newValue);
+    else if (operator === 'divideButton') return division(value, newValue);
+}
+
+function addition(a, b) {
     //converts to int before doing math to avoid decimal problems (e.g. -0.3+0.1)
     return (a * 1000000 + b * 1000000) / 1000000;
 }
 
-function doSubtraction(a, b) {
+function subtraction(a, b) {
     //converts to int before doing math to avoid decimal problems (e.g. 0.3-0.1)
     return (a * 1000000 - b * 1000000) / 1000000;
 }
 
-function doMultiplication(a, b) {
+function multiplication(a, b) {
     return a * b;
 }
 
-function doDivision(a, b) {
+function division(a, b) {
     return a / b;
 }
 
 function displayAnswer() {
-    let displayLength = 10;
-    if (value.toString().length < displayLength) {
-        displayLength = value.toString().length
-    }
-
-    let answer = Number(value.toString().substring(0, displayLength));
-    if (Number.isNaN(answer)) {
-        answer = "Error";
-    }
+    let answer = formatAnswer();
+    if (isError(answer)) answer = "Error";
     displayText.innerText = answer;
+}
+
+function formatAnswer() {
+    const currentLength = value.toString().length;
+    let displayLength = 10;
+    if (currentLength < displayLength) displayLength = currentLength;
+    return Number(value.toString().substring(0, displayLength));
+}
+
+function isError(answer) {
+    if (Number.isNaN(answer)) return true;
+    return false;
 }
